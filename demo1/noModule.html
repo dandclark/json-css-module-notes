@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+    <head>
+        <title>parallelFetch noModule</title>
+        <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
+        <script type="module">
+            import "./busyWork.js";
+            import {FetchTestElement} from "./fetcherElement.js";
+            window.customElements.define("fetch-test-element", FetchTestElement);
+        </script>
+        <script>
+            function loadHandler() {
+                setTimeout(() => {
+                    let element = document.createElement("fetch-test-element");
+                    document.body.appendChild(element);
+                }, 25);
+            }
+            </script>
+    </head>
+    <body onload="loadHandler()">
+        <fetch-test-element></fetch-test-element>
+        <fetch-test-element></fetch-test-element>
+    </body>
+</html>

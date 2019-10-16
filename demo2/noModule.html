@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+    <head>
+        <title>linkInShadow noModule</title>
+        <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
+        <script type="module">
+            import {LinkTestElement} from "./linkInShadowElement.js";
+            window.customElements.define("link-in-shadow-test-element", LinkTestElement);
+        </script>
+        <script>
+            function loadHandler() {
+                setTimeout(() => {
+                    let element = document.createElement("link-in-shadow-test-element");
+                    document.body.appendChild(element);
+                }, 25);
+            }
+            </script>
+    </head>
+    <body onload="loadHandler()">
+        <!-- <link-in-shadow-test-element></link-in-shadow-test-element>
+        <link-in-shadow-test-element></link-in-shadow-test-element> -->
+    </body>
+</html>
