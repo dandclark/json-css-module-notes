@@ -39,7 +39,7 @@ class FetchTestElement extends HTMLElement {
 
         configPromise.then((dataText) => {
             let displayTextConfig = JSON.parse(dataText);
-            document.querySelector(".text-container").innerText = displayTextConfig.displayText;
+            this.shadow.querySelector(".text-container").innerText = displayTextConfig.displayText;
         });
     }
 }
