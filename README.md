@@ -1,5 +1,5 @@
 # JSON/CSS Module notes
-JSON and CSS modules provide several ergonomic benefits for web component developers.  They provide easy integration into the JavaScript module graph with automatic deduping of dependencies, and eliminate the need to manually manage `fetch()`es or pollute the DOM with extra `<style>` and `<link rel="stylesheet">` elements.
+[JSON modules](https://github.com/whatwg/html/pull/4407) and [CSS modules](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/css-modules-v1-explainer.md) provide several ergonomic benefits for web component developers.  They provide easy integration into the JavaScript module graph with automatic deduping of dependencies, and eliminate the need to manually manage `fetch()`es or pollute the DOM with extra `<style>` and `<link rel="stylesheet">` elements.
 
 However, there are also important quantitative performance advantages to JSON and CSS modules over the current equivalents.  This document describes these advantages and illustrates them with code samples.
 
@@ -63,9 +63,10 @@ With JSON modules, on the other hand, browsers can initiate
 the fetch for a JSON file as soon as the importing module is parsed, prior to module linking or execution.  [Demo 1](#Demo-1) illustrates this difference.
 
 ## Demo 1
-### Fetches for JSON and CSS modules starts before script execution
-https://dandclark.github.io/json-css-module-notes/demo1/index.html
-(the JSON modules demo requires Chrome or Edge launched with --enable-blink-features=JSONModules)
+### [Fetches for JSON and CSS modules starts before script execution](https://dandclark.github.io/json-css-module-notes/demo1/index.html)
+[https://dandclark.github.io/json-css-module-notes/demo1/index.html](https://dandclark.github.io/json-css-module-notes/demo1/index.html)
+
+(The JSON modules demo requires Chrome or Edge launched with --enable-blink-features=JSONModules).
 
 This demo compares two similar custom elements written as a JavaScript module, each of which requires a JSON resource.  The first custom element consumes the JSON by `fetch()`ing it, and the second by `import`ing it as a module.  For both custom elements, an additional `busyWork.js` module is included in the module graph before the module containing the custom element definition.  This is a stand-in for any arbitrary script that might appear in the module graph prior to the custom element definition, such as a JavaScript libary.
 
@@ -78,8 +79,10 @@ In the `fetch()` version of the custom element, the JSON file isn't fetched unti
 ![With JSON module](demo1Module.PNG)
 
 ## Demo 2
-### CSS modules vs <link> elements in shadow roots
-https://dandclark.github.io/json-css-module-notes/demo2/index.html
+### [CSS modules vs `<link>` elements in shadow roots](https://dandclark.github.io/json-css-module-notes/demo2/index.html)
+[https://dandclark.github.io/json-css-module-notes/demo2/index.html](https://dandclark.github.io/json-css-module-notes/demo2/index.html)
+
+(There is no general CSS modules browser support as of this writing; that part of the demo was developed on a custom Chromium build).
 
 This demo compares two similar custom elements written as a JavaScript module, each of which loads its styles from a separate `styles.css` file.  The first custom element applies its styles by adding the styles via a `<link rel="stylesheet">` in the custom element shadow root.  The second loads its styles via a CSS module.
 
