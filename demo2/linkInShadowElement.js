@@ -4,10 +4,9 @@ class LinkTestElement extends HTMLElement {
         this.shadow = this.attachShadow({mode: "closed"});
 
         this.shadow.innerHTML = `
-        <link rel="stylesheet" href="linkTest.css" />
+        <link rel="stylesheet" href="styles.css" />
         <div class="outer-container">
             <div class="text-container">This text should be styled</div>
-            <div class="cat-container"></div>
         </div>
         `;  
     }

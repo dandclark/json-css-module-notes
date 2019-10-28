@@ -8,16 +8,8 @@
             import {FetchTestElement} from "./fetcherElement.js";
             window.customElements.define("fetch-test-element", FetchTestElement);
         </script>
-        <script>
-            function loadHandler() {
-                setTimeout(() => {
-                    let element = document.createElement("fetch-test-element");
-                    document.body.appendChild(element);
-                }, 25);
-            }
-            </script>
     </head>
-    <body onload="loadHandler()">
+    <body>
         <fetch-test-element></fetch-test-element>
         <fetch-test-element></fetch-test-element>
     </body>

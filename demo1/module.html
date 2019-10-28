@@ -8,16 +8,8 @@
             import {JSONModuleTestElement} from "./jsonModuleElement.js";
             window.customElements.define("json-module-test-element", JSONModuleTestElement);
         </script>
-        <script>
-            function loadHandler() {
-                setTimeout(() => {
-                    let element = document.createElement("json-module-test-element");
-                    document.body.appendChild(element);
-                }, 25);
-            }
-            </script>
     </head>
-    <body onload="loadHandler()">
+    <body>
         <json-module-test-element></json-module-test-element>
         <json-module-test-element></json-module-test-element>
     </body>
