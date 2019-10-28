@@ -60,7 +60,7 @@ modules.  However, static JSON modules can do better performance-wise.  In the e
 the `fetch()` for data.json doesn't start until the JavaScript in the module executes.  This could be delayed by other dependencies in the module graph being slow to load, or by longer executions of other modules that appear earlier in the module graph's execution order.
 
 With JSON modules, on the other hand, browsers can initiate
-the fetch for a JSON file as soon as the importing module is parsed, prior to module linking or execution.  [Demo 1](#Demo-1) illustrates this difference.
+the fetch for a JSON file as soon as the importing module is parsed, prior to module linking or execution.  [Demo 1](#demo-1) illustrates this difference.
 
 ## Demo 1
 ### [Fetches for JSON and CSS modules starts before script execution](https://dandclark.github.io/json-css-module-notes/demo1/index.html)
