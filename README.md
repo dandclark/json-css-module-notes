@@ -1,7 +1,7 @@
 # JSON/CSS Module notes
 [JSON modules](https://github.com/whatwg/html/pull/4407) and [CSS modules](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/css-modules-v1-explainer.md) provide several ergonomic benefits for web component developers.  They provide easy integration into the JavaScript module graph with automatic deduping of dependencies, and eliminate the need to manually manage `fetch()`es or pollute the DOM with extra `<style>` and `<link rel="stylesheet">` elements.
 
-However, there are also important quantitative performance advantages to JSON and CSS modules over the current equivalents.  This document describes these advantages and illustrates them with code samples.
+Additionally, there are important quantitative performance advantages to JSON and CSS modules over the current equivalents.  This document describes these advantages and illustrates them with code samples.
 
 ## A performance-equivalent JSON module can't be created with JavaScript modules
 
