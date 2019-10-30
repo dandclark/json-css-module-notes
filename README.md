@@ -105,7 +105,7 @@ If `styles.css` was slow to arrive over the network, or was large enough to take
 
 (There is no general CSS modules browser support as of this writing; that part of the demo was created and tested a custom Chromium build).
 
-An alternative non-module approach for packaging CSS/JSON in a custom element is to inline the content as a JavaScript string rather than `fetch()`ing it dynamically.
+An alternative non-module approach for packaging CSS/JSON in a custom element is to inline the content as a JavaScript string rather than `fetch()`ing it dynamically.  This string can be fed into a [Constructed Stylesheet](https://developers.google.com/web/updates/2019/02/constructable-stylesheets) or a `<style>` element.
 This eliminates any concerns about a a delay in the `fetch()` as outlined above.  However, in addition to the clunky developer ergonimics
 of a bunch of inlined JavaScript string content in one's custom element JS logic, this approach has a quantifiable memory cost.  This is due to the fact that the original JS string lives on alongside the CSSStyleSheet or JSON object that it is eventually parsed into.  Whereas with CSS/JSON modules, nothing persists but the CSSStylesheet or JSON object.
 
