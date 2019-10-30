@@ -82,7 +82,7 @@ In the `fetch()` version of the custom element, the JSON file isn't fetched unti
 ### [CSS modules vs `<link>` elements in shadow roots](https://dandclark.github.io/json-css-module-notes/demo2/index.html)
 [https://dandclark.github.io/json-css-module-notes/demo2/index.html](https://dandclark.github.io/json-css-module-notes/demo2/index.html)
 
-(There is no general CSS modules browser support as of this writing; that part of the demo was developed on a custom Chromium build).
+(There is no general CSS modules browser support as of this writing; that part of the demo was created and tested using a custom Chromium build).
 
 This demo compares two similar custom elements written as a JavaScript module, each of which loads its styles from a separate `styles.css` file.  The first custom element applies its styles by adding the styles via a `<link rel="stylesheet">` in the custom element shadow root.  The second loads its styles via a CSS module.
 
@@ -97,3 +97,20 @@ Using CSS modules, styles.css is fetched as part of processing the module graph,
 ![With CSSmodule](demo2Module.PNG)
 
 If `styles.css` was slow to arrive over the network, or was large enough to take a nontrivial amount of time to parse, front-loading the work could result in a user-percievable difference in how early the styles are applied to the page.
+
+
+## Demo 3
+### [CSS/JSON modules have a lower memory footprint than inlining the CSS/JSON as a JavaScript string](https://dandclark.github.io/json-css-module-notes/demo3/index.html)
+[https://dandclark.github.io/json-css-module-notes/demo3/index.html](https://dandclark.github.io/json-css-module-notes/demo3/index.html)
+
+(There is no general CSS modules browser support as of this writing; that part of the demo was created and tested a custom Chromium build).
+
+An alternative non-module approach for packaging CSS/JSON in a custom element is to inline the content as a JavaScript string rather than `fetch()`ing it dynamically.
+This eliminates any concerns about a a delay in the `fetch()` as outlined above.  However, in addition to the clunky developer ergonimics
+of a bunch of inlined JavaScript string content in one's custom element JS logic, this approach has a quantifiable memory cost.  This is due to the fact that the original JS string lives on alongside the CSSStyleSheet or JSON object that it is eventually parsed into.  Whereas with CSS/JSON modules, nothing persists but the CSSStylesheet or JSON object.
+
+[Demo3](https://dandclark.github.io/json-css-module-notes/demo3/index.html) linked above illustrates this difference.  Both the no-module and the module case load a custom element that pulls in ~30MB of CSS.  The no-module case imports inlines it in the JS file defining the custom element, in the style of some of the [existing Chromium layered API elements](https://cs.chromium.org/chromium/src/third_party/blink/renderer/core/script/resources/layered_api/elements/).  The module case imports the same CSS as a CSS module.  After reaching steady-state, the memory difference is around the same ~30MB as the raw CSS text:
+
+![Memory savings with CSS modules versus inlined CSS-as-JS-string](demo3SteadyState.PNG)
+
+This steady state is reached after leaving both tabs in the background for ~60 seconds.  Before this final garbage collection, the difference is even more stark; in my observations the inline CSS case hovers around ~95MB for the first 60 seconds, whereas the CSS modules tab goes down to ~38MB within the first few seconds.

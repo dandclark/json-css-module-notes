@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+    <head>
+        <title>CSS module custom element</title>
+        <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
+        <script type="module">
+            import {CSSModuleCatElement} from "./cssModuleCatElement.js";
+            window.customElements.define("cat-element", CSSModuleCatElement);
+        </script>
+    </head>
+    <body>
+        <cat-element></cat-element>
+    </body>
+</html>
