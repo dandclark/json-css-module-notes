@@ -71,29 +71,9 @@ From the perspective of the importer this is ergonomically more or less equivale
 
 And the above depends on the standardization and broad adoption of top-level await.  Until that happens, devs are stuck exporting a Promise that the importer needs to deal with.
 
-## Demo 2
-### [CSS modules vs `<link>` elements in shadow roots](https://dandclark.github.io/json-css-module-notes/demo2/index.html)
-[https://dandclark.github.io/json-css-module-notes/demo2/index.html](https://dandclark.github.io/json-css-module-notes/demo2/index.html)
-
-(There is no general CSS modules browser support as of this writing; that part of the demo was created and tested using a custom Chromium build).
-
-This demo compares two similar custom elements written as a JavaScript module, each of which loads its styles from a separate `styles.css` file.  The first custom element applies its styles by adding the styles via a `<link rel="stylesheet">` in the custom element shadow root.  The second loads its styles via a CSS module.
-
-With the `<link>` element approach, the `<link>` isn't processed until an instance of the custom element is inserted into the document.  In [demo2/NoModule.html](demo2/noModule.html), there is a delay before an instance of the custom element is created and inserted (to simulate, for example, a custom element that is only added based on some user action) and thus a corresponding delay before styles.css is fetched.
-
-#### With `<link rel="stylesheet">` in shadowRoot:
-![With <link rel="stylesheet"> in shadowRoot](demo2NoModule.PNG)
-
-Using CSS modules, styles.css is fetched as part of processing the module graph, before any JavaScript is executed.
-
-#### With CSS module:
-![With CSSmodule](demo2Module.PNG)
-
-If `styles.css` was slow to arrive over the network, or was large enough to take a nontrivial amount of time to parse, front-loading the work could result in a user-percievable difference in how early the styles are applied to the page.
-
-## Demo 3
-### [CSS/JSON modules have a lower memory footprint than inlining the CSS/JSON as a JavaScript string](https://dandclark.github.io/json-css-module-notes/demo3/index.html)
-[https://dandclark.github.io/json-css-module-notes/demo3/index.html](https://dandclark.github.io/json-css-module-notes/demo3/index.html)
+## Demo 1
+### [CSS/JSON modules have a lower memory footprint than inlining the CSS/JSON as a JavaScript string](https://dandclark.github.io/json-css-module-notes/demo1/index.html)
+[https://dandclark.github.io/json-css-module-notes/demo1/index.html](https://dandclark.github.io/json-css-module-notes/demo1/index.html)
 
 (There is no general CSS modules browser support as of this writing; that part of the demo was created and tested a custom Chromium build).
 
@@ -101,8 +81,29 @@ An alternative non-module approach for packaging CSS/JSON in a custom element is
 This eliminates any concerns about a a delay in the `fetch()` as outlined above.  However, in addition to the clunky developer ergonimics
 of a bunch of inlined JavaScript string content in one's custom element JS logic, this approach has a quantifiable memory cost.  This is due to the fact that the original JS string lives on alongside the CSSStyleSheet or JSON object that it is eventually parsed into.  Whereas with CSS/JSON modules, nothing persists but the CSSStylesheet or JSON object.
 
-[Demo3](https://dandclark.github.io/json-css-module-notes/demo3/index.html) linked above illustrates this difference.  Both the no-module and the module case load a custom element that pulls in ~30MB of CSS.  The no-module case imports inlines it in the JS file defining the custom element, in the style of some of the [existing Chromium layered API elements](https://cs.chromium.org/chromium/src/third_party/blink/renderer/core/script/resources/layered_api/elements/).  The module case imports the same CSS as a CSS module.  After reaching steady-state, the memory difference is around the same ~30MB as the raw CSS text:
+[Demo1](https://dandclark.github.io/json-css-module-notes/demo1/index.html) linked above illustrates this difference.  Both the no-module and the module case load a custom element that pulls in ~30MB of CSS.  The no-module case imports inlines it in the JS file defining the custom element, in the style of some of the [existing Chromium layered API elements](https://cs.chromium.org/chromium/src/third_party/blink/renderer/core/script/resources/layered_api/elements/).  The module case imports the same CSS as a CSS module.  After reaching steady-state, the memory difference is around the same ~30MB as the raw CSS text:
 
-![Memory savings with CSS modules versus inlined CSS-as-JS-string](demo3SteadyState.PNG)
+![Memory savings with CSS modules versus inlined CSS-as-JS-string](demo1/demo1SteadyState.PNG)
 
 This steady state is reached after leaving both tabs in the background for ~60 seconds.  Before this final garbage collection, the difference is even more stark; in my observations the inline CSS case hovers around ~95MB for the first 60 seconds, whereas the CSS modules tab goes down to ~38MB within the first few seconds.
+
+
+## Demo 3
+### [CSS modules vs `<link>` elements in shadow roots](https://dandclark.github.io/json-css-module-notes/demo3/index.html)
+[https://dandclark.github.io/json-css-module-notes/demo3/index.html](https://dandclark.github.io/json-css-module-notes/demo3/index.html)
+
+(There is no general CSS modules browser support as of this writing; that part of the demo was created and tested using a custom Chromium build).
+
+This demo compares two similar custom elements written as a JavaScript module, each of which loads its styles from a separate `styles.css` file.  The first custom element applies its styles by adding the styles via a `<link rel="stylesheet">` in the custom element shadow root.  The second loads its styles via a CSS module.
+
+With the `<link>` element approach, the `<link>` isn't processed until an instance of the custom element is inserted into the document.  In [demo3/NoModule.html](demo3/noModule.html), there is a delay before an instance of the custom element is created and inserted (to simulate, for example, a custom element that is only added based on some user action) and thus a corresponding delay before styles.css is fetched.
+
+#### With `<link rel="stylesheet">` in shadowRoot:
+![With <link rel="stylesheet"> in shadowRoot](demo3NoModule.PNG)
+
+Using CSS modules, styles.css is fetched as part of processing the module graph, before any JavaScript is executed.
+
+#### With CSS module:
+![With CSSmodule](demo3Module.PNG)
+
+If `styles.css` was slow to arrive over the network, or was large enough to take a nontrivial amount of time to parse, front-loading the work could result in a user-percievable difference in how early the styles are applied to the page.
