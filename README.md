@@ -71,30 +71,6 @@ From the perspective of the importer this is ergonomically more or less equivale
 
 And the above depends on the standardization and broad adoption of top-level await.  Until that happens, devs are stuck exporting a Promise that the importer needs to deal with.
 
-However, static JSON modules can do better performance-wise.  In the example above,
-the `fetch()` for data.json doesn't start until the JavaScript in the module executes.  This could be delayed by other dependencies in the module graph being slow to load, or by longer executions of other modules that appear earlier in the module graph's execution order.
-
-With JSON modules, on the other hand, browsers can initiate
-the fetch for a JSON file as soon as the importing module is parsed, prior to module linking or execution.  [Demo 1](#demo-1) illustrates this difference.
-
-## Demo 1
-### [Fetches for JSON and CSS modules starts before script execution](https://dandclark.github.io/json-css-module-notes/demo1/index.html)
-[https://dandclark.github.io/json-css-module-notes/demo1/index.html](https://dandclark.github.io/json-css-module-notes/demo1/index.html)
-
-(The JSON modules demo requires Chrome or Edge launched with --enable-blink-features=JSONModules).
-
-This demo compares two similar custom elements written as a JavaScript module, each of which requires a JSON resource.  The first custom element consumes the JSON by `fetch()`ing it, and the second by `import`ing it as a module.  For both custom elements, an additional `busyWork.js` module is included in the module graph before the module containing the custom element definition.  This is a stand-in for any arbitrary script that might appear in the module graph prior to the custom element definition, such as a JavaScript library.
-
-In the `fetch()` version of the custom element, the JSON file isn't fetched until after the code in `busyWork.js` has finished executing, where in the JSON module version of the custom element the JSON file is fetched prior to any script execution.  In a real-world scenario where there was network delay in fetching the file, or where there are significant amounts of computation that can only run after the JSON resource is loaded, there could be a significant, user-percieved performance difference.
-
-#### With fetch():
-![With fetch](demo1NoModule.PNG)
-
-
-TODO: Screenshot has tooltip
-#### With JSON module:
-![With JSON module](demo1Module.PNG)
-
 ## Demo 2
 ### [CSS modules vs `<link>` elements in shadow roots](https://dandclark.github.io/json-css-module-notes/demo2/index.html)
 [https://dandclark.github.io/json-css-module-notes/demo2/index.html](https://dandclark.github.io/json-css-module-notes/demo2/index.html)
