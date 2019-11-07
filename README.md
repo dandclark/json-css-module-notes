@@ -3,22 +3,22 @@
 
 Additionally, there are important quantitative performance advantages to JSON and CSS modules over the current equivalents.  This document describes these advantages and illustrates them with code samples.
 
-## A performance-equivalent JSON module can't be created with JavaScript modules
+## A performance-equivalent JSON module can't be built with JavaScript modules
 
 A naive attempt to replicate the functionality of JSON modules with a JavaScript module wrapper might look something like this:
 
 ```JavaScript
-let responseJSONObject;
+let jsonObject;
 
 fetch("./data.json")
     .then((response) => {
         return response.text();
     })
     .then((responseText) => {
-        responseJSONObject = JSON.parse(responseText);
+        jsonObject = JSON.parse(responseText);
     });
 
-export default responseJSONObject;
+export default jsonObject;
 ```
 
 But, because the fetch() completes asynchronously the importer can't safely use the imported JSON object immediately.  So, the module can instead export a Promise:
@@ -35,28 +35,43 @@ let responseJSONPromise = fetch("./data.json")
 export default responseJSONPromise;
 ```
 
-Now, however, importers are saddled with the responsibility of waiting for the promise to resolve and of re-exporting the Promise if they want to export dependencies of their own.
+Now, however, importers are saddled with the responsibility of waiting for the Promise to resolve, and if they want to export anything that depends on the result of the originally imported Promise they must themselves export a Promise.
 
-These problems will eventually be resolved by [Top-level Await](https://github.com/tc39/proposal-top-level-await) when it becomes standardized.
+This necessity to export Promises will eventually be resolved by [Top-level Await](https://github.com/tc39/proposal-top-level-await) when it becomes standardized.
 Running with the experimental V8 [--js-flags="--harmony-top-level-await"](https://bugs.chromium.org/p/v8/issues/detail?id=9344),
 the simulated JSON module can be written the following way:
 
 ```JavaScript
-let responseJSONObject;
+let jsonObject;
 
 await fetch("./data.json")
     .then((response) => {
         return response.text();
     })
     .then((responseText) => {
-        responseJSONObject = JSON.parse(responseText);
+        jsonObject = JSON.parse(responseText);
     });
 
-export default responseJSONObject;
+export default jsonObject;
 ```
 
-From the perspective of the importer this is ergonomically pretty much equivalent to native JSON
-modules.  However, static JSON modules can do better performance-wise.  In the example above,
+or alternatively:
+
+```JavaScript
+let response = await fetch("./data2.json")
+let responseText = await response.text();
+let jsonObject = JSON.parse(responseText);
+export default jsonObject;
+```
+
+From the perspective of the importer this is ergonomically more or less equivalent to native JSON modules.  However it still has these disadvantages:
+ - The above code snippets take two network requests: the `import` of the wrapper JS module and its `fetch()` of the JSON.  A native JSON module just has a single `import` for the JSON.
+ - JSON module dependencies are resolved statically before module graph evaluation, so if a JSON module fails to load it will block any code in the module graph from running.  If a dynamically `fetch()`ed JSON dependency fails to load, part of the module graph could already have executed and caused side-effects.
+ - Native JSON modules is convenient; it's a bit simpler for devs if they don't have to include the manual `fetch()` and `JSON.parse()` stuff in their code.
+
+And the above depends on the standardization and broad adoption of top-level await.  Until that happens, devs are stuck exporting a Promise that the importer needs to deal with.
+
+However, static JSON modules can do better performance-wise.  In the example above,
 the `fetch()` for data.json doesn't start until the JavaScript in the module executes.  This could be delayed by other dependencies in the module graph being slow to load, or by longer executions of other modules that appear earlier in the module graph's execution order.
 
 With JSON modules, on the other hand, browsers can initiate
@@ -68,13 +83,15 @@ the fetch for a JSON file as soon as the importing module is parsed, prior to mo
 
 (The JSON modules demo requires Chrome or Edge launched with --enable-blink-features=JSONModules).
 
-This demo compares two similar custom elements written as a JavaScript module, each of which requires a JSON resource.  The first custom element consumes the JSON by `fetch()`ing it, and the second by `import`ing it as a module.  For both custom elements, an additional `busyWork.js` module is included in the module graph before the module containing the custom element definition.  This is a stand-in for any arbitrary script that might appear in the module graph prior to the custom element definition, such as a JavaScript libary.
+This demo compares two similar custom elements written as a JavaScript module, each of which requires a JSON resource.  The first custom element consumes the JSON by `fetch()`ing it, and the second by `import`ing it as a module.  For both custom elements, an additional `busyWork.js` module is included in the module graph before the module containing the custom element definition.  This is a stand-in for any arbitrary script that might appear in the module graph prior to the custom element definition, such as a JavaScript library.
 
 In the `fetch()` version of the custom element, the JSON file isn't fetched until after the code in `busyWork.js` has finished executing, where in the JSON module version of the custom element the JSON file is fetched prior to any script execution.  In a real-world scenario where there was network delay in fetching the file, or where there are significant amounts of computation that can only run after the JSON resource is loaded, there could be a significant, user-percieved performance difference.
 
 #### With fetch():
 ![With fetch](demo1NoModule.PNG)
 
+
+TODO: Screenshot has tooltip
 #### With JSON module:
 ![With JSON module](demo1Module.PNG)
 
@@ -97,7 +114,6 @@ Using CSS modules, styles.css is fetched as part of processing the module graph,
 ![With CSSmodule](demo2Module.PNG)
 
 If `styles.css` was slow to arrive over the network, or was large enough to take a nontrivial amount of time to parse, front-loading the work could result in a user-percievable difference in how early the styles are applied to the page.
-
 
 ## Demo 3
 ### [CSS/JSON modules have a lower memory footprint than inlining the CSS/JSON as a JavaScript string](https://dandclark.github.io/json-css-module-notes/demo3/index.html)
