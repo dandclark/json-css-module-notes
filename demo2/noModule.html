@@ -3,14 +3,26 @@
     <head>
         <title>Inline CSS custom element</title>
         <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
+        <script>
+            performance.mark("load start");
+            console.log("load start");
+
+            function onload() {
+                performance.mark("load end");
+                console.log("load end");
+                let loadTime = performance.measure("load start", "load end");
+                document.getElementById("loadTime").innerHTML = "Load time: " + loadTime.duration;
+            }
+        </script>
         <script type="module">
             import {InlineCSSCatElement} from "./inlineCSSCatElement.js";
             window.customElements.define("cat-element", InlineCSSCatElement);
         </script>
     </head>
-    <body>
+    <body onload="onload()">
         <h3>Hit Shift+Esc to see memory usage.  To reach steady-state, put the tab
         in the background and wait ~60s.</h3>
         <cat-element></cat-element>
+        <div id="loadTime"></div>
     </body>
 </html>

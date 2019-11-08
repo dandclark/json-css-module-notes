@@ -1,12 +1,12 @@
 <!doctype html>
 <html>
     <head>
-        <title>ShadowRoot memory - CSS Module</title>
+        <title>ShadowRoot memory - &lt;style&gt; element</title>
         <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
         <script>
             function logPerf(eventDesc) {
                 let li = document.createElement("li");
-                li.appendChild(document.createTextNode(`${eventDesc}: ${Math.round(performance.now())}`));
+                li.appendChild(document.createTextNode(`${eventDesc}: ${Math.round(performance.now())} ms`));
                 document.getElementById("perfLog").appendChild(li);
             }
 
@@ -15,110 +15,12 @@
             }
         </script>
         <script type="module">
-            import {CSSModuleTestElement} from "./cssModuleElement.js";
-            window.customElements.define("styles-test-element", CSSModuleTestElement);
+            import {StyleTestElement} from "./styleInShadowElement.js";
+            window.customElements.define("styles-test-element", StyleTestElement);
         </script>
     </head>
     <body onload="loadHandler()">
             <ul id="perfLog"></ul>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
-            <styles-test-element></styles-test-element>
             <styles-test-element></styles-test-element>
             <styles-test-element></styles-test-element>
             <styles-test-element></styles-test-element>
