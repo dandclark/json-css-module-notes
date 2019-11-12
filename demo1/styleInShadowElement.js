@@ -22,7 +22,7 @@ class StyleTestElement extends HTMLElement {
                 text-fill-color: transparent;
                 -webkit-text-fill-color: transparent;
             }
-            </style><div class="outer-container"><div class="text-container">This text should be styled</div></div>`;
+            </style><div class="outer-container text-container">This text should be styled</div>`;
     }
 }
 export {StyleTestElement};
