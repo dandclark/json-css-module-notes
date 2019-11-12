@@ -81,21 +81,21 @@ A custom element that pulls in its styles with CSS module, however, only process
 
 [Demo 1](https://dandclark.github.io/json-css-module-notes/demo1/index.html) illustrates this difference with a custom element written 3 different ways: with a `<style>` element in each shadow root, with a `<link>` element in each shadow root, and with a single CSS module applied to each shadow root's `adoptedStyleSheets`.  To make the performance differences easily distinguishable, each page includes 15,000 instances of the respective custom element version.
 
-I generally observe the CSS module element version loading about 1 second faster than the `<style>` element version, though the difference will vary per machine.
+The following graph is characteristic of the results:
 
-![`<style>` in shadow root load time](demo1/styleInShadowRootHighlight.PNG)
+![Load time of different custom element types](demo1/loadTimeGraph.PNG)
 
-![CSS module load time](demo1/cssModuleHighlight.PNG)
+Of course the absolute times will change per machine, but I observe a similar ratio of load times across different environments.
 
-The `<link>` element version loads much more slowly:
+Digging into the performance traces, we found that the gains came from the areas we expected:
 
-![`<link>` in shadow root load time](demo1/linkInShadowRootHighlight.PNG)
+![CSS module perf win breakdown](demo1/loadTimeTable.PNG)
 
-It's not clear why `<link>` is so much slower; caching should prevent it from making a new network request for each element instance.  There might be a Chromium bug here, but in any case we expect that the performance best case should be similar to the `<style>` version.
+These results make sense; for the `<link>` and `<style>` approaches, each custom element instance must have its own instance of one of these elements.  It takes time to allocate this element, and process its various rules for insertion into the DOM tree.  For example, setting up all of the StyleSheet fetches for the `<link>` element approach takes a nontrivial amount of time even though they all end up hitting the cache.  With CSS modules on the other hand, there is just a single CSSStyleSheet instance for the entire page.
 
-There are also memory savings from omitting the extra elements.  After reaching baseline (putting tabs in background and waiting for final GC at ~60 seconds) I see these numbers:
+There are also memory savings from omitting the extra elements.  After reaching baseline (putting tabs in background and waiting for final GC at ~60 seconds) I see these numbers like this:
 
-![steady-state memory usage](demo1/steadyStateHighlight.PNG)
+![steady-state memory usage](demo1/mem2All.PNG)
 
 ### Demo 2:  [CSS/JSON modules have a lower memory footprint than inlining the CSS/JSON as a JavaScript string](https://dandclark.github.io/json-css-module-notes/demo2/index.html)
 [https://dandclark.github.io/json-css-module-notes/demo2/index.html](https://dandclark.github.io/json-css-module-notes/demo2/index.html)
