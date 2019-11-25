@@ -150,7 +150,6 @@ JSON modules share the performance advantage of JSON.parse, because they basical
 
 I've placed a simple demo of this difference [here](https://dandclark.github.io/json-css-module-notes/demo4/index.html).  Both versions load the same 35 MB of JSON content.  One loads it as a JSON module and the other inlines the content as a JavaScript object.  Over 10 runs, all from a cold start, I observe the JSON module version loading in an average of 581 ms while the JS object version takes 1769 ms.
 
-Another alternative is to inline the content as a JS string fed directly to JSON.parse, rather than going through a JSON module.  However, this approach can easily suffer from the same pitfall outlined in [Demo 2](https://dandclark.github.io/json-css-module-notes/demo2/index.html)
- where the string never garbage collectible, resulting in unnecessary memory bloat relative to the JSON modules approach.
+Another alternative is to inline the content as a JS string fed directly to JSON.parse, rather than going through a JSON module.  However, this approach can easily suffer from the same pitfall outlined in [Demo 2](https://dandclark.github.io/json-css-module-notes/demo2/index.html) where the string is never garbage collectible, resulting in unnecessary memory bloat relative to the JSON modules approach.
 
-Sample JSON date obtained (and modified to reduce size) from [here](https://github.com/zemirco/sf-city-lots-json); see LICENSE.txt file.
+Sample JSON date obtained (and modified to reduce size) from [here](https://github.com/zemirco/sf-city-lots-json); see [LICENSE.txt](License.txt) file.
