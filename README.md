@@ -130,3 +130,27 @@ Using CSS modules, styles.css is fetched as part of processing the module graph,
 ![With CSSmodule](demo3/module.PNG)
 
 If `styles.css` was slow to arrive over the network, or was large enough to take a nontrivial amount of time to parse, front-loading the work could result in a user-percievable difference in how early the styles are applied to the page.
+
+### Demo 4: [JSON modules are faster than inline JavaScript objects](https://dandclark.github.io/json-css-module-notes/demo4/index.html)
+[https://dandclark.github.io/json-css-module-notes/demo4/index.html](https://dandclark.github.io/json-css-module-notes/demo4/index.html)
+
+In V8, it's faster to load a JSON object by feeding a string to JSON.parse() than by creating the equivalent JavaScript object directly.  That is, this:
+```JavaScript
+const json = JSON.parse('{ "color": "blue", "shape": "circle", ...}');
+```
+
+Will tend to be faster than this:
+```JavaScript
+const json = { color: "blue", shape: "circle", ...};
+```
+
+[This V8 dev blog post](https://v8.dev/blog/cost-of-javascript-2019#json) goes into more detail, including V8 performance data.  Put simply, JSON.parse is cheaper because the JSON format is significantly simpler than the JavaScript language, so parsing it can be done much more quickly.
+
+JSON modules share the performance advantage of JSON.parse, because they basically do a JSON.parse under the hood; at no point does the content of a JSON module need to be parsed as JavaScript.
+
+I've placed a simple demo of this difference [here](https://dandclark.github.io/json-css-module-notes/demo4/index.html).  Both versions load the same 35 MB of JSON content.  One loads it as a JSON module and the other inlines the content as a JavaScript object.  Over 10 runs, all from a cold start, I observe the JSON module version loading in an average of 581 ms while the JS object version takes 1769 ms.
+
+Another alternative is to inline the content as a JS string fed directly to JSON.parse, rather than going through a JSON module.  However, this approach can easily suffer from the same pitfall outlined in [Demo 2](https://dandclark.github.io/json-css-module-notes/demo2/index.html)
+ where the string never garbage collectible, resulting in unnecessary memory bloat relative to the JSON modules approach.
+
+Sample JSON date obtained (and modified to reduce size) from [here](https://github.com/zemirco/sf-city-lots-json); see LICENSE.txt file.

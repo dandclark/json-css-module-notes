@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Big JSON module</title>
+        <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
+        <script>
+            function logPerf(eventDesc) {
+                let li = document.createElement("li");
+                li.appendChild(document.createTextNode(`${eventDesc}: ${Math.round(performance.now())} ms`));
+                document.getElementById("perfLog").appendChild(li);
+            }
+
+            function loadHandler() {
+                logPerf("load event");
+            }
+        </script>
+        <script type="module">
+            import jsonData from "./citylots_reduced.json";
+            logPerf(`Got JSON with array of length ${jsonData.features.length} items`);
+        </script>
+    </head>
+    <body onload="loadHandler()">
+        <ul id="perfLog"></ul>
+    </body>
+</html>
