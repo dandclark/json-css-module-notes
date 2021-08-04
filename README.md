@@ -3,6 +3,8 @@
 
 Additionally, there are important behavioral differences and quantitative performance wins to JSON and CSS modules over the current equivalents.  This document describes these advantages and illustrates them with code samples.
 
+Note that as of August 2021, Edge or Chrome >=93 is required to run the CSS module examples.
+
 ## An equivalent to JSON modules can't be built with JavaScript modules
 
 A naive attempt to replicate the functionality of JSON modules with a JavaScript module wrapper might look something like this:
@@ -100,8 +102,6 @@ There are also memory savings from omitting the extra elements.  After reaching 
 ### Demo 2:  [CSS/JSON modules have a lower memory footprint than inlining the CSS/JSON as a JavaScript string](https://dandclark.github.io/json-css-module-notes/demo2/index.html)
 [https://dandclark.github.io/json-css-module-notes/demo2/index.html](https://dandclark.github.io/json-css-module-notes/demo2/index.html)
 
-(There is no general CSS modules browser support as of this writing; that part of the demo was created and tested a custom Chromium build).
-
 An alternative non-module approach for packaging CSS/JSON in a custom element is to inline the content as a JavaScript string rather than `fetch()`ing it dynamically, and feeding it into a [Constructed Stylesheet](https://developers.google.com/web/updates/2019/02/constructable-stylesheets).
 This eliminates the issues in Demo 1 where extra work is repeated for each custom element instance.  However, in addition to the clunky developer ergonimics
 of a bunch of inlined JavaScript string content in one's custom element JS logic, this approach can still have an extra memory cost.  This is due to the fact that the original JS string lives on alongside the CSSStyleSheet or JSON object that it is eventually parsed into.  Whereas with CSS/JSON modules, nothing persists but the CSSStylesheet or JSON object.
@@ -114,8 +114,6 @@ This steady state is reached after leaving both tabs in the background for ~60 s
 
 ### Demo 3: [Delayed stylesheet fetching for `<link>` elements in shadow roots](https://dandclark.github.io/json-css-module-notes/demo3/index.html)
 [https://dandclark.github.io/json-css-module-notes/demo3/index.html](https://dandclark.github.io/json-css-module-notes/demo3/index.html)
-
-(There is no general CSS modules browser support as of this writing; that part of the demo was created and tested using a custom Chromium build).
 
 This demo shows an additional disadvantage to using `<link>` in a shadow root to load a custom element's styles.  It compares two similar custom elements written as  JavaScript modules, each of which loads its styles from a separate `styles.css` file.  The first custom element applies its styles by adding the styles via a `<link rel="stylesheet">` in the custom element shadow root.  The second loads its styles via a CSS module.
 
