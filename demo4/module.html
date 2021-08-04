@@ -15,7 +15,7 @@
             }
         </script>
         <script type="module">
-            import jsonData from "./citylots_reduced.json";
+            import jsonData from "./citylots_reduced.json" assert { type: "json" };
             logPerf(`Got JSON with array of length ${jsonData.features.length} items`);
         </script>
     </head>

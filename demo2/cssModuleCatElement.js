@@ -1,4 +1,4 @@
-import sheet from "./big_styles.css";
+import sheet from "./big_styles.css" assert { type: "css" };
 
 class CSSModuleCatElement extends HTMLElement {
     constructor() {

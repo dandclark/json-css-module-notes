@@ -1,4 +1,4 @@
-import sheet from "./styles.css";
+import sheet from "./styles.css" assert { type: "css" };
 
 class CSSModuleTestElement extends HTMLElement {
     constructor() {
